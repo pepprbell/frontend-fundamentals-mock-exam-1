@@ -1,21 +1,27 @@
-import { useEffect } from 'react';
 import {
   colors,
   ListRow,
 } from 'tosslib';
 import useSavingsProductData from './hooks/useSavingsProductData';
 import { comma } from '../../utils/number';
+import useProductStore from '../../store/productStore';
+import { useMemo } from 'react';
 
 export default function SavingsProduct() {
+  const { terms, monthlyAmount } = useProductStore()
   const products = useSavingsProductData()
-
-  useEffect(() => {
-    console.log(products)
-  }, [products])
+  const filteredProducts = useMemo(() => {
+    return products.filter((each) => {
+      return each.availableTerms === terms
+          && (Number(monthlyAmount) === 0
+            || (Number(monthlyAmount) <= each.maxMonthlyAmount
+            && Number(monthlyAmount) >= each.minMonthlyAmount))
+    })
+  }, [products, terms, monthlyAmount])
 
   return (
     <>
-      { products.map((each) => (
+      { filteredProducts.map((each) => (
         <ListRow
           key={each.id+each.name}
           contents={
