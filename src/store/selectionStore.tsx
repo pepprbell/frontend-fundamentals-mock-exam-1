@@ -1,13 +1,14 @@
 import { create } from 'zustand'
+import { SavingsProduct } from '../domains/savingsProduct/SavingsProduct'
 
 interface SelectionStore {
-  selectedProduct: string;
-  setSelectedProduct: (newId: string) => void;
+  selectedProduct: SavingsProduct | null
+  setSelectedProduct: (newProduct: SavingsProduct) => void
 }
 
 const useSelectionStore = create<SelectionStore>((set) => ({
-  selectedProduct: '',
-  setSelectedProduct: (newId: string) => set({ selectedProduct: newId }),
+  selectedProduct: null,
+  setSelectedProduct: (newProduct: SavingsProduct) => set({ selectedProduct: newProduct }),
 }))
 
 export default useSelectionStore
