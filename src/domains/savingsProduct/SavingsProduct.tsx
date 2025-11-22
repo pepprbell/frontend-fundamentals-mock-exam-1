@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import {
   colors,
   ListRow,
@@ -8,19 +7,14 @@ import useSavingsProductData from './hooks/useSavingsProductData';
 import { comma } from '../../utils/number';
 import useProductStore from '../../store/productStore';
 import useSelectionStore from '../../store/selectionStore';
+import useFilterData from './hooks/useFilterData';
 
-export default function SavingsProduct() {
+export default function SavingsProduct({ count = -1, sort = false }: { count?: number, sort?: boolean }) {
   const { terms, monthlyAmount } = useProductStore()
   const { selectedProduct, setSelectedProduct } = useSelectionStore()
+  
   const products = useSavingsProductData()
-  const filteredProducts = useMemo(() => {
-    return products.filter((each) => {
-      return each.availableTerms === terms
-          && (Number(monthlyAmount) === 0
-            || (Number(monthlyAmount) <= each.maxMonthlyAmount
-            && Number(monthlyAmount) >= each.minMonthlyAmount))
-    })
-  }, [products, terms, monthlyAmount])
+  const filteredProducts = useFilterData(products, terms, monthlyAmount, count, sort)
 
   return (
     <>
@@ -39,8 +33,8 @@ export default function SavingsProduct() {
           />
         }
         // todo: 원 색상 초록색으로
-        right={ selectedProduct === each.id ? <Assets.Icon name="icon-check-fill" color={colors.green400} /> : null}
-        onClick={() => {setSelectedProduct(each.id)}}
+        right={ selectedProduct?.id === each.id ? <Assets.Icon name="icon-check-fill" color={colors.green400} /> : null}
+        onClick={() => {setSelectedProduct(each)}}
       />
       ))}
     </>
