@@ -20,7 +20,7 @@ export default function SavingsProduct({ count = -1, sort = false }: { count?: n
     <>
       { filteredProducts.map((each) => (
         <ListRow
-          key={each.id+each.name}
+          key={getRandomKey()+each.id}
           contents={
             <ListRow.Texts
             type="3RowTypeA"
@@ -48,4 +48,8 @@ export interface SavingsProduct {
   maxMonthlyAmount: number;
   minMonthlyAmount: number;
   availableTerms: number;
+}
+
+function getRandomKey() {
+  return Math.random().toString(36).substring(2, 24)
 }
