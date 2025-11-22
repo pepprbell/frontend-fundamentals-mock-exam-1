@@ -1,14 +1,17 @@
+import { useMemo } from 'react';
 import {
   colors,
   ListRow,
+  Assets,
 } from 'tosslib';
 import useSavingsProductData from './hooks/useSavingsProductData';
 import { comma } from '../../utils/number';
 import useProductStore from '../../store/productStore';
-import { useMemo } from 'react';
+import useSelectionStore from '../../store/selectionStore';
 
 export default function SavingsProduct() {
   const { terms, monthlyAmount } = useProductStore()
+  const { selectedProduct, setSelectedProduct } = useSelectionStore()
   const products = useSavingsProductData()
   const filteredProducts = useMemo(() => {
     return products.filter((each) => {
@@ -35,7 +38,9 @@ export default function SavingsProduct() {
             bottomProps={{ fontSize: 13, color: colors.grey600 }}
           />
         }
-        onClick={() => {}}
+        // todo: 원 색상 초록색으로
+        right={ selectedProduct === each.id ? <Assets.Icon name="icon-check-fill" color={colors.green400} /> : null}
+        onClick={() => {setSelectedProduct(each.id)}}
       />
       ))}
     </>
