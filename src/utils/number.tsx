@@ -5,7 +5,7 @@ export function comma(str: number | string) {
 
 // 천의 자리에 콤마 제거
 export function uncomma(str: number | string) {
-  return String(str).replace(/,/g, '')
+  return Number(String(str).replace(/,/g, ''))
 }
 
 // input 값이 숫자인지 검증
